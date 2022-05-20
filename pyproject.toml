@@ -17,6 +17,9 @@ langid = "^1.1.6"
 pydub = "^0.25.1"
 httpx = "^0.22.0"
 mockingbirdonlyforuse = "^0.0.10"
+torch = "^1.10.1"
+torchvision = "^0.11.2" 
+torchaudio = "^0.10.1"
 
 [tool.poetry.dev-dependencies]
 
