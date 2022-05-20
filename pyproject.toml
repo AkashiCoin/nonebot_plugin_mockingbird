@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "nonebot-plugin-mockingbird"
+version = "0.0.1"
+description = "利用MockingBird生成语音并发送"
+authors = ["AkashiCoin <l1040186796@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/AkashiCoin/nonebot_plugin_mockingbird"
+repository = "https://github.com/AkashiCoin/nonebot_plugin_mockingbird"
+keywords = ["MockingBird", "nonebot"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+nonebot2="^2.0.0b1"
+nonebot-adapter-onebot = "^2.0.0-beta.1"
+langid = "^1.1.6"
+pydub = "^0.25.1"
+httpx = "^0.22.0"
+mockingbirdonlyforuse = "^0.0.10"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
