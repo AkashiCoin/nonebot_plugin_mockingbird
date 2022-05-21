@@ -46,4 +46,5 @@ pip install nonebot_plugin_mockingbird
 - [babysor/MockingBird](https://github.com/babysor/MockingBird)
 - [HibiKier/zhenxun_bot](https://github.com/HibiKier/zhenxun_bot) 基于 Nonebot2 和 go-cqhttp 开发，以 postgresql 作为数据库，非常可爱的绪山真寻bot
 - [MeetWq/mybot](https://github.com/MeetWq/mybot)
+- [MeetWq/MockingBirdForUse](https://github.com/MeetWq/MockingBirdForUse)
 

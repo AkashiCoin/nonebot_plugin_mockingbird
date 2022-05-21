@@ -31,24 +31,9 @@ class MockingBirdManager:
         self.model_list_file = model_list_file
         self.config_file = config_file
 
-        if not model_list_file.exists():
-            logger.info("Downloading MockingBird model data resource...")
-            get_model_list_file(model_list_file)
-            with open(model_list_file, "w", encoding="utf-8") as f:
-                f.write(json.dumps(dict()))
-                f.close()
-
-        if model_list_file.exists():
-            with open(model_list_file, "r", encoding="utf-8") as f:
-                self.model_list = json.load(f)
-
-        if not config_file.exists():
-            self.init_data()
-
-        if config_file.exists():
-            with open(config_file, "r", encoding="utf-8") as f:
-                self.config = json.load(f)
-
+        self.load_config()
+        self.load_model_list()
+        
     def init_data(self) -> None:
         """
         初始化配置文件
@@ -60,12 +45,43 @@ class MockingBirdManager:
         }
         self.save_data()
     
+    def load_model_list(self) -> None:
+        """
+        加载模型列表
+        """
+        if not self.model_list_file.exists():
+            logger.info("Downloading MockingBird model data resource...")
+            get_model_list_file(self.model_list_file)
+            with open(self.model_list_file, "w", encoding="utf-8") as f:
+                f.write(json.dumps(dict()))
+                f.close()
+        if self.model_list_file.exists():
+            with open(self.model_list_file, "r", encoding="utf-8") as f:
+                self.model_list = json.load(f)
+
+    def load_config(self) -> None:
+        """
+        加载配置文件
+        """
+        if not self.config_file.exists():
+            self.init_data()
+        if self.config_file.exists():
+            with open(self.config_file, "r", encoding="utf-8") as f:
+                self.config = json.load(f)
+
+
     def set_config(self, config_name: str, value) -> None:
+        """
+        更新配置文件
+        """
         self.config[config_name] = value
         self.save_data()
 
     def get_config(self, config_name: str):
-        return self.config[config_name]
+        """
+        获取配置
+        """
+        return self.config.get(config_name)
 
     def save_data(self) -> None:
         """
@@ -73,8 +89,11 @@ class MockingBirdManager:
         """
         with open(self.config_file, "w", encoding="utf-8") as f:
             json.dump(self.config, f, ensure_ascii=False, indent=4)
-
-    def get_model_list(self) -> dict:
-        return self.model_list
+        self.load_config()
+    
+    def update_model_list(self) -> bool:
+        msg = get_model_list_file(self.model_list_file)
+        self.load_model_list()
+        return msg
 
 Config = MockingBirdManager(Path(MOCKINGBIRD_PATH))

@@ -1,4 +1,3 @@
-import asyncio
 import json
 import aiofiles
 import httpx
@@ -60,7 +59,7 @@ async def check_resource(root: Path, model_name: str):
 def get_model_list_file(file_path: Path) -> None:
     url = f"https://fastly.jsdelivr.net/gh/AkashiCoin/nonebot_plugin_mockingbird@master/nonebot_plugin_mockingbird/resource/model_list.json"
     try:
-        with asyncio.run(httpx.AsyncClient()) as Client:
+        with httpx.Client() as Client:
             data = Client.get(url).json()
             if data:
                 with open(file_path, "w", encoding="utf-8") as f:

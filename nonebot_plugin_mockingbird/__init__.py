@@ -1,14 +1,13 @@
 import asyncio
 import os
-from functools import partial
 from pathlib import Path
 
 import langid
 import nonebot
-from MockingBirdOnlyForUse import MockingBird, Params
-from MockingBirdOnlyForUse import logger as mocking_logger
+from mockingbirdforuse import MockingBird
+from mockingbirdforuse.log import logger as mocking_logger
+from mockingbirdforuse.log import default_filter
 from nonebot import Driver, export, on_command
-
 from nonebot.adapters.onebot.v11 import Message, MessageEvent, MessageSegment
 from nonebot.log import logger as nonebot_logger
 from nonebot.params import ArgStr, CommandArg
@@ -16,9 +15,9 @@ from nonebot.permission import SUPERUSER
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 
-from .data_source import get_ai_voice, is_number
-from .download import check_resource, download_resource, get_model_list_file
 from .config import MOCKINGBIRD_PATH, Config
+from .data_source import get_ai_voice, is_number
+from .download import check_resource, download_resource
 
 __help__plugin_name__ = "MockingBird语音"
 __des__ = "利用MockingBird生成语音并发送"
@@ -30,7 +29,7 @@ __cmd__ = f"""
     重载模型 进行模型重载(并没有什么卵用，或许以后内存泄漏解决会有用？)
     调整/修改精度 修改语音合成精度
     调整/修改句长 修改语音合成最大句长
-发送“头像表情包”查看支持的指令
+    更新模型 更新模型列表
 """.strip()
 __example__ = """
 @真寻 说真寻可爱
@@ -40,12 +39,14 @@ __example__ = """
 """.strip()
 __usage__ = f"{__des__}\n\nUsage:\n{__cmd__}\n\nExamples:\n{__example__}"
 
-mocking_logger.logger = nonebot_logger  # 覆盖使用nonebot的logger
-mockingbird_path = Path(MOCKINGBIRD_PATH)
-
 driver: Driver = nonebot.get_driver()
-part: partial = partial(Params)
 export = export()
+
+mockingbird_path = Path(MOCKINGBIRD_PATH)
+mocking_logger = nonebot_logger  # 覆盖使用nonebot的logger
+default_filter.level = driver.config.log_level
+
+mockingbird = MockingBird()
 
 @driver.on_startup
 async def init_mockingbird():
@@ -65,22 +66,12 @@ async def init_mockingbird():
                 mocking_logger.error("模型下载失败，请检查网络...")
                 return False
         mocking_logger.info("开始加载 MockingBird 模型...")
-        MockingBird.init(
+        mockingbird.load_model(
             Path(os.path.join(mockingbird_path, "encoder.pt")),
             Path(os.path.join(mockingbird_path, "g_hifigan.pt")),
-            "HifiGan",
+            # Path(os.path.join(mockingbird_path, "wavernn.pt"))
         )
-        part = partial(
-            Params,
-            recoder_path=Path(os.path.join(model_path, "record.wav")),
-            synthesizer_path=Path(os.path.join(model_path, f"{model_name}.pt")),
-            accuracy=Config.get_config(config_name="voice_accuracy"),
-            steps=Config.get_config(config_name="max_steps"),
-            vocoder="HifiGan",
-        )
-        export.MockingBird = MockingBird
-        export.Params = Params
-        export.part = part
+        mockingbird.set_synthesizer(Path(os.path.join(model_path, f"{model_name}.pt")))
         return True
     except Exception as e:
         return f"{type(e)}：{e}"
@@ -112,9 +103,17 @@ async def _(state: T_State,  words: str = ArgStr("words")):
     if langid.classify(words)[0] == "ja":
         record = await get_ai_voice(words)
     else:
-        params = part(words)
-        params.text = words
-        record = await asyncio.get_event_loop().run_in_executor(None, MockingBird.genrator_voice, params)
+        record = await asyncio.get_event_loop().run_in_executor(
+            None,
+            mockingbird.synthesize,
+            str(words),
+            mockingbird_path / Config.get_config(config_name="model") / "record.wav",
+            "HifiGan",
+            0,
+            Config.get_config(config_name="voice_accuracy"),
+            Config.get_config(config_name="max_steps"),
+        )
+        record = MessageSegment.record(record)
     await voice.finish(MessageSegment.record(record))
 
 @view_model.handle()
@@ -122,7 +121,7 @@ async def _():
     msg = "当前加载的模型为:{}\n".format(Config.get_config(config_name="model"))
     msg += "当前精度: {} , 最大句长: {}\n".format(Config.get_config(config_name="voice_accuracy"), Config.get_config(config_name="max_steps"))
     msg += "可以修改的模型列表:"
-    for i, model in Config.get_model_list().items():
+    for i, model in Config.model_list.items():
         msg += "\n{}. {} --- {}".format(i, model[0], model[1])
     await view_model.finish(msg)
 
@@ -130,13 +129,13 @@ async def _():
 async def _(arg: Message = CommandArg()):
     args = arg.extract_plain_text().strip()
     if is_number(args):
-        args = Config.get_model_list().get(args)
+        args = Config.model_list.get(args)
         if args is None:
             await change_model.finish("该模型不存在...")
         else:
             args = args[0]
     models = []
-    for model in Config.get_model_list().values():
+    for model in Config.model_list.values():
         models.append(model[0])
     if args not in models:
         await change_model.finish("该模型不存在...")
@@ -190,7 +189,7 @@ async def _(arg: Message = CommandArg()):
 
 @update_model_list.handle()
 async def _():
-    msg = get_model_list_file()
+    msg = Config.update_model_list()
     if isinstance(msg, str):
         update_model_list.finish(msg)
     else:
