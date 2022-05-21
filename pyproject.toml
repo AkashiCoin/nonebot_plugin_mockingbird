@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-mockingbird"
-version = "0.1.1"
+version = "0.1.2"
 description = "利用MockingBird生成语音并发送"
 authors = ["AkashiCoin <l1040186796@gmail.com>"]
 license = "MIT"

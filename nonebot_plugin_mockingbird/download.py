@@ -57,7 +57,7 @@ async def check_resource(root: Path, model_name: str):
 
 # 更新配置文件
 def get_model_list_file(file_path: Path) -> None:
-    url = f"https://fastly.jsdelivr.net/gh/AkashiCoin/nonebot_plugin_mockingbird@master/nonebot_plugin_mockingbird/resource/model_list.json"
+    url = f"https://cdn.jsdelivr.net/gh/AkashiCoin/nonebot_plugin_mockingbird@master/nonebot_plugin_mockingbird/resource/model_list.json"
     try:
         with httpx.Client() as Client:
             data = Client.get(url).json()

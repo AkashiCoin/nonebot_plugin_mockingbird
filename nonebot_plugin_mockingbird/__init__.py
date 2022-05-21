@@ -35,7 +35,7 @@ __example__ = """
 @真寻 说真寻可爱
 修改模型 azusa
 调整精度 9
-调整句长 4
+调整句长 1000
 """.strip()
 __usage__ = f"{__des__}\n\nUsage:\n{__cmd__}\n\nExamples:\n{__example__}"
 
@@ -50,7 +50,6 @@ mockingbird = MockingBird()
 
 @driver.on_startup
 async def init_mockingbird():
-    global part
     global export
     global mockingbird
     model_name = Config.get_config(config_name="model")
@@ -113,7 +112,6 @@ async def _(state: T_State,  words: str = ArgStr("words")):
             Config.get_config(config_name="voice_accuracy"),
             Config.get_config(config_name="max_steps"),
         )
-        record = MessageSegment.record(record)
     await voice.finish(MessageSegment.record(record))
 
 @view_model.handle()
@@ -178,19 +176,19 @@ async def _(arg: Message = CommandArg()):
     if not is_number(args):
         await adjust_steps.finish("请输入数字...")
     num = int(args)
-    if num > 0 and num < 11:
+    if num > 199 and num < 2001:
         Config.set_config(config_name="max_steps", value=num)
         msg = await init_mockingbird()
         if isinstance(msg, str):
             await adjust_steps.finish(f"调整失败...错误信息:{msg}")
         await adjust_steps.finish(f"已修改最大句长为: {num}")
     else:
-        await adjust_steps.finish("请输入1-10以内的数字！")
+        await adjust_steps.finish("请输入200-2000以内的数字！")
 
 @update_model_list.handle()
 async def _():
     msg = Config.update_model_list()
     if isinstance(msg, str):
-        update_model_list.finish(msg)
+        await update_model_list.finish(msg)
     else:
-        update_model_list.finish("模型列表更新成功!")
+        await update_model_list.finish("模型列表更新成功!")

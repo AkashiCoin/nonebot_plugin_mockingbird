@@ -41,7 +41,7 @@ class MockingBirdManager:
         self.config = {
             "model": "azusa",
             "voice_accuracy": 9,
-            "max_steps": 4,
+            "max_steps": 1000,
         }
         self.save_data()
     
