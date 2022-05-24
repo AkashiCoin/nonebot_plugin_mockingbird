@@ -1,4 +1,18 @@
 [[package]]
+name = "aiofile"
+version = "3.7.4"
+description = "Asynchronous file operations."
+category = "main"
+optional = false
+python-versions = ">3.4.*, <4"
+
+[package.dependencies]
+caio = ">=0.9.0,<0.10.0"
+
+[package.extras]
+develop = ["aiomisc", "asynctest", "pytest", "pytest-cov"]
+
+[[package]]
 name = "anyio"
 version = "3.6.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -41,6 +55,17 @@ description = "multi-library, cross-platform audio decoding"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "caio"
+version = "0.9.5"
+description = "Asynchronous file IO for Linux Posix and Windows."
+category = "main"
+optional = false
+python-versions = ">=3.5.*, <4"
+
+[package.extras]
+develop = ["aiomisc", "pytest", "pytest-cov"]
 
 [[package]]
 name = "certifi"
@@ -728,9 +753,13 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "4a1b1b4fe0b923ee08c85bd546c082f5a8af31dbf5c74755aae7820fd8016e71"
+content-hash = "7ace334d2a559a1dda2094c0ed527a6e2b43067cb3e197b9a6a7bb2a287085fd"
 
 [metadata.files]
+aiofile = [
+    {file = "aiofile-3.7.4-py3-none-any.whl", hash = "sha256:0e2a524e4714efda47ce8964b13d4da94cf553411f9f6da813df615a4cd73d95"},
+    {file = "aiofile-3.7.4.tar.gz", hash = "sha256:0aefa1d91d000d3a20a515d153db2ebf713076c7c94edf2fca85d3d83316abc5"},
+]
 anyio = [
     {file = "anyio-3.6.1-py3-none-any.whl", hash = "sha256:cb29b9c70620506a9a8f87a309591713446953302d7d995344d0d7c6c0c9a7be"},
     {file = "anyio-3.6.1.tar.gz", hash = "sha256:413adf95f93886e442aea925f3ee43baa5a765a64a0f52c6081894f9992fdd0b"},
@@ -745,6 +774,23 @@ asgiref = [
 ]
 audioread = [
     {file = "audioread-2.1.9.tar.gz", hash = "sha256:a3480e42056c8e80a8192a54f6729a280ef66d27782ee11cbd63e9d4d1523089"},
+]
+caio = [
+    {file = "caio-0.9.5-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:cd1c20aab04c18f0534b3f0b59103a94dede3c7d7b43c9cc525df3980b4c7c54"},
+    {file = "caio-0.9.5-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:dd316270757d77f384c97e336588267e7942c1f1492a3a2e07b9a80dca027538"},
+    {file = "caio-0.9.5-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:013aa374158c5074b3c65a0da6b9c6b20a987d85fb317dd077b045e84e2478e1"},
+    {file = "caio-0.9.5-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:d767faf537a9ea774e8408ba15a0f1dc734f06857c2d28bdf4258a63b5885f42"},
+    {file = "caio-0.9.5-cp36-cp36m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:97d9a10522a8a25798229fc1113cfaba3832b1cd0c1a3648b009b9740ef5e054"},
+    {file = "caio-0.9.5-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:4fe9eff5cf7a2d6f3f418aeeccd11ce9a38329e07527b6f52da085edb44bc2fd"},
+    {file = "caio-0.9.5-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:b8b6be369139edd678817dc0a313392d710f66fb521c275dce0a9067089b346b"},
+    {file = "caio-0.9.5-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:3ffc6259239e03962f9e14829e02795ca9d196eedf32fe61688ba6ed33da46c8"},
+    {file = "caio-0.9.5-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:7a19dfdec6736affb645da233a6007c2590678490d2a1e0f1fb82a696c0a1ddf"},
+    {file = "caio-0.9.5-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:15f70d27e1009d279e4f9ff86290aad00b0511ce82a1879c40745244f0a9ec92"},
+    {file = "caio-0.9.5-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:0427a58c1814a091bfbb84318d344fdb9a68f3d49adc74e5fdc7bc9478e1e4fe"},
+    {file = "caio-0.9.5-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:7f48fa58e5f699b428f1fd85e394ecec05be4048fcaf1fdf1981b748cd1e03a6"},
+    {file = "caio-0.9.5-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:01061288391020f28e1ab8b0437420f7fe1e0ecc29b4107f7a8dcf7789f33b22"},
+    {file = "caio-0.9.5-py3-none-any.whl", hash = "sha256:3c74d84dff2bec5f93685cf2f32eb22e4cc5663434a9be5f4a759247229b69b3"},
+    {file = "caio-0.9.5.tar.gz", hash = "sha256:167d9342a807bae441b2e88f9ecb62da2f236b319939a8679f68f510a0194c40"},
 ]
 certifi = [
     {file = "certifi-2022.5.18.1-py3-none-any.whl", hash = "sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a"},
