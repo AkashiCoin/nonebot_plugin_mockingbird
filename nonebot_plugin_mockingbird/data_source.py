@@ -69,24 +69,3 @@ async def split_voice(input) -> Optional[BytesIO]:
         result.export(output, format="mp3")
         return output
     return None
-
-def is_number(s: str) -> bool:
-    """
-    说明：
-        检测 s 是否为数字
-    参数：
-        :param s: 文本
-    """
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
-    try:
-        import unicodedata
-
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
-    return False

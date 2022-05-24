@@ -1,6 +1,30 @@
 {
-    "1": ["azusa", "阿梓语音"],
-    "4": ["nanmei", "小南莓语音"],
-    "5": ["ltyai", "洛天依语音"],
-    "6": ["tianyi", "洛天依语音-wq"]
+  "azusa": {
+    "nickname": "阿梓语音",
+    "url": {
+      "record_url": "https://pan.yropo.top/home/source/mockingbird/azusa/record.wav",
+      "model_url": "https://pan.yropo.top/home/source/mockingbird/azusa/azusa.pt"
+    }
+  },
+  "nanmei": {
+    "nickname": "小南莓语音",
+    "url": {
+      "record_url": "https://pan.yropo.top/home/source/mockingbird/nanmei/record.wav",
+      "model_url": "https://pan.yropo.top/home/source/mockingbird/nanmei/nanmei.pt"
+    }
+  },
+  "ltyai": {
+    "nickname": "洛天依语音",
+    "url": {
+      "record_url": "https://pan.yropo.top/home/source/mockingbird/ltyai/record.wav",
+      "model_url": "https://pan.yropo.top/home/source/mockingbird/ltyai/ltyai.pt"
+    }
+  },
+  "tianyi": {
+    "nickname": "洛天依语音-wq",
+    "url": {
+      "record_url": "https://pan.yropo.top/home/source/mockingbird/tianyi/record.wav",
+      "model_url": "https://pan.yropo.top/home/source/mockingbird/tianyi/tianyi.pt"
+    }
+  }
 }

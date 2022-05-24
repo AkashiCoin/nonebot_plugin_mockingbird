@@ -29,18 +29,21 @@ async def download_url(url: str, path: Path) -> bool:
     return False
 
 # 下载资源
-async def download_resource(root: Path, model_name: str):
+async def download_resource(root: Path, model_name: str, model_info: dict):
     for file_name in ["g_hifigan.pt", "encoder.pt"]:
         if not (root / file_name).exists():
             logger.info(f"{file_name}不存在，开始下载{file_name}...请不要退出...")
             res = await download_url(url=base_url + file_name, path=root / file_name)
             if not res:
                 return False
-    url = f"{base_url}{model_name}/"
     for file_name in ["record.wav", f"{model_name}.pt"]:
         if not (root / model_name / file_name).exists():
             logger.info(f"{file_name}不存在，开始下载{file_name}...请不要退出...")
-            res = await download_url(url + file_name, root / model_name / file_name)
+            if file_name == "record.wav":
+                url = model_info["url"]["record_url"]
+            else:
+                url = model_info["url"]["model_url"]
+            res = await download_url(url, root / model_name / file_name)
             if not res:
                 return False
     return True

@@ -16,7 +16,7 @@ from nonebot.rule import to_me
 from nonebot.typing import T_State
 
 from .config import MOCKINGBIRD_PATH, Config
-from .data_source import get_ai_voice, is_number
+from .data_source import get_ai_voice
 from .download import check_resource, download_resource
 
 __help__plugin_name__ = "MockingBird语音"
@@ -59,7 +59,7 @@ async def init_mockingbird():
             mocking_logger.info("MockingBird 模型不存在...开始下载模型...")
             model_path.parent.mkdir(parents=True, exist_ok=True)
         if not await check_resource(mockingbird_path, model_name):
-            if await download_resource(mockingbird_path, model_name):
+            if await download_resource(mockingbird_path, model_name, Config.get_model_info(model_name)):
                 mocking_logger.info("模型下载成功...")
             else:
                 mocking_logger.error("模型下载失败，请检查网络...")
@@ -119,23 +119,18 @@ async def _():
     msg = "当前加载的模型为:{}\n".format(Config.get_config(config_name="model"))
     msg += "当前精度: {} , 最大句长: {}\n".format(Config.get_config(config_name="voice_accuracy"), Config.get_config(config_name="max_steps"))
     msg += "可以修改的模型列表:"
-    for i, model in Config.model_list.items():
-        msg += "\n{}. {} --- {}".format(i, model[0], model[1])
+    for i, model_name in enumerate(Config._list):
+        msg += "\n{}. {} --- {}".format(i, model_name, Config.get_model_info(model_name)["nickname"])
     await view_model.finish(msg)
 
 @change_model.handle()
 async def _(arg: Message = CommandArg()):
     args = arg.extract_plain_text().strip()
-    if is_number(args):
-        args = Config.model_list.get(args)
+    if args.isnumeric():
+        args = Config._list[int(args)]
         if args is None:
-            await change_model.finish("该模型不存在...")
-        else:
-            args = args[0]
-    models = []
-    for model in Config.model_list.values():
-        models.append(model[0])
-    if args not in models:
+            await change_model.finish("该模型序号不存在...")
+    if args not in list(Config._list):
         await change_model.finish("该模型不存在...")
     else:
         if args == Config.get_config(config_name="model"):
@@ -158,7 +153,7 @@ async def reload_model():
 @adjust_accuracy.handle()
 async def _(arg: Message = CommandArg()):
     args = arg.extract_plain_text().strip()
-    if not is_number(args):
+    if not args.isnumeric():
         await adjust_accuracy.finish("请输入数字...")
     num = int(args)
     if num > 2 and num < 10:
@@ -173,7 +168,7 @@ async def _(arg: Message = CommandArg()):
 @adjust_steps.handle()
 async def _(arg: Message = CommandArg()):
     args = arg.extract_plain_text().strip()
-    if not is_number(args):
+    if not args.isnumeric():
         await adjust_steps.finish("请输入数字...")
     num = int(args)
     if num > 199 and num < 2001:

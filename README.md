@@ -36,6 +36,23 @@ pip install nonebot_plugin_mockingbird
 更新模型 更新模型列表
 ```
 
+### 欢迎pr提供模型和模型下载地址
+
+在 nonebot_plugin_mockingbird/resource/model_list.json 中添加
+
+json 模板
+```json
+{
+  "azusa": {
+    "nickname": "阿梓语音",
+    "url": {
+      "record_url": "https://pan.yropo.top/home/source/mockingbird/azusa/record.wav",
+      "model_url": "https://pan.yropo.top/home/source/mockingbird/azusa/azusa.pt"
+    }
+  }
+}
+```
+
 ### 特别感谢
 
 - [Diaosi1111/nonebot_mockingbird_plugin](https://github.com/Diaosi1111/nonebot_mockingbird_plugin)

@@ -58,6 +58,7 @@ class MockingBirdManager:
         if self.model_list_file.exists():
             with open(self.model_list_file, "r", encoding="utf-8") as f:
                 self.model_list = json.load(f)
+        self._list = self.get_list()
 
     def load_config(self) -> None:
         """
@@ -82,6 +83,18 @@ class MockingBirdManager:
         获取配置
         """
         return self.config.get(config_name)
+
+    def get_list(self) -> list:
+        """
+        获取模型列表
+        """
+        info: list =[]
+        for model_name in self.model_list:
+            info.append(model_name)
+        return info
+
+    def get_model_info(self, model_name: str):
+        return self.model_list[model_name]
 
     def save_data(self) -> None:
         """
