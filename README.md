@@ -38,7 +38,7 @@ pip install nonebot_plugin_mockingbird
 
 ### 欢迎pr提供模型和模型下载地址
 
-在 nonebot_plugin_mockingbird/resource/model_list.json 中添加
+在 [nonebot_plugin_mockingbird/resource/model_list.json](https://github.com/AkashiCoin/nonebot_plugin_mockingbird/blob/master/nonebot_plugin_mockingbird/resource/model_list.json) 中添加
 
 json 模板
 ```json
