@@ -58,9 +58,9 @@ async def check_resource(root: Path, model_name: str):
             return False
     return True
 
-# 更新配置文件
+# 更新模型列表文件
 def get_model_list_file(file_path: Path) -> None:
-    url = f"https://cdn.jsdelivr.net/gh/AkashiCoin/nonebot_plugin_mockingbird@master/nonebot_plugin_mockingbird/resource/model_list.json"
+    url = f"https://raw.fastgit.org/AkashiCoin/nonebot_plugin_mockingbird/master/nonebot_plugin_mockingbird/resource/model_list.json"
     try:
         with httpx.Client() as Client:
             data = Client.get(url).json()
@@ -69,7 +69,7 @@ def get_model_list_file(file_path: Path) -> None:
                     json.dump(data, f, ensure_ascii=False, indent=4)
                     return True
             else:
-                return "更新配置文件失败..."
+                return "更新模型列表失败..."
     except Exception as e:
         logger.error(f"Error downloading {url} .. Error: {e}")
-        return "更新配置文件失败..."
+        return "更新模型列表失败..."
